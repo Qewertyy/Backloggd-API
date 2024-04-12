@@ -37,7 +37,6 @@ async function getUserInfo(
   let userinfo: userInfo = {} as userInfo;
   userinfo.username = username;
   const hasBio = $("#bio-body").has("p").length === 0;
-  console.log(hasBio);
   const userBio = hasBio ? $("#bio-body").text().trim() : "Nothing here!"
   userinfo.bio = userBio;
   const favoriteGames: favoriteGames[] = [];
