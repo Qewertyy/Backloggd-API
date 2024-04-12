@@ -2,7 +2,7 @@ import axios, { Axios, AxiosError } from "axios";
 import cheerio from "cheerio";
 import config from "../config";
 import { favoriteGames, recentlyPlayed, userInfo } from "../types/game";
-import { extraxtGame } from "../utils/game";
+import { extractGame } from "../utils/game";
 
 async function getUserInfo(
   username: string
@@ -52,14 +52,14 @@ async function getUserInfo(
     userStats[key] = parseInt(value);
   });
   favoritesDiv.each((i, el) => {
-    const game = extraxtGame($(el));
+    const game = extractGame($(el));
     if (game) {
       const mostFavorite = el.attribs.class.includes("ultimate_fav");
       favoriteGames.push({ ...game, mostFavorite });
     }
   });
   recentlyPlayedDiv.each((i, el) => {
-    const game = extraxtGame($(el));
+    const game = extractGame($(el));
     if (game) {
       recentlyPlayed.push({ ...game });
     }

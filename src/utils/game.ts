@@ -2,7 +2,7 @@
 
 import { Cheerio, Element } from "cheerio";
 
-function extraxtGame(element: Cheerio<Element>) {
+function extractGame(element: Cheerio<Element>) {
     const game = element.find("div.overflow-wrapper");
     const name = game.find("img").attr("alt");
     const image = game.find("img").attr("src");
@@ -12,4 +12,4 @@ function extraxtGame(element: Cheerio<Element>) {
     return null;
 }
 
-export { extraxtGame}
+export { extractGame}
