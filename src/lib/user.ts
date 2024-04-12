@@ -36,7 +36,8 @@ async function getUserInfo(
   const $ = cheerio.load(response.data);
   let userinfo: userInfo = {} as userInfo;
   userinfo.username = username;
-  const userBio = $("#bio-body").children("p").children("i").text();
+  const hasBio = $("#bio-body").hasClass("rmjs-1")
+  const userBio = hasBio ? $("#bio-body").text() : "Nothing here!"
   userinfo.bio = userBio;
   const favoriteGames: favoriteGames[] = [];
   const recentlyPlayed: recentlyPlayed[] = [];
