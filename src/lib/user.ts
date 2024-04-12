@@ -36,6 +36,7 @@ async function getUserInfo(
   const $ = cheerio.load(response.data);
   let userinfo: userInfo = {} as userInfo;
   userinfo.username = username;
+  userinfo.profile = $("meta[property='og:image']").attr("content") || "https://backloggd.b-cdn.net/no_avatar.jpg";
   const hasBio = $("#bio-body").has("p").length === 0;
   const userBio = hasBio ? $("#bio-body").text().trim() : "Nothing here!"
   userinfo.bio = userBio;

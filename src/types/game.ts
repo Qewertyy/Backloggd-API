@@ -1,6 +1,7 @@
 //Copyright 2023 Qewertyy, MIT License
 
 export type userInfo = {
+    profile: string;
     username: string;
     bio: string;
     favoriteGames?: favoriteGames[];
