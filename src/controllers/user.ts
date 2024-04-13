@@ -21,7 +21,11 @@ async function userInfo(req: Request, res: Response) {
       .status(response.status || 500)
       .json({ message: response.error, code: 0 });
   }
-  return res.status(200).json(response);
+  return res.status(200).json({
+    message: "success",
+    code: 2,
+    content: response,
+  });
 }
 
 Route
