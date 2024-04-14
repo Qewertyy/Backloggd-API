@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "main": "src/app.ts",
+    "homepage": "https://github.com/Qewertyy/Backloggd-Api",
     "scripts": {
         "app": "node src/app.ts",
         "start": "nodemon src/app.ts",
@@ -12,6 +13,18 @@
         "dev": "nodemon src/app.ts"
     },
     "author": "Qewertyy <Qewertyy.irl@gmail.com>",
+    "keywords": [
+        "backloggd",
+        "api",
+        "backlog",
+        "express",
+        "typescript",
+        "backloggd-api"
+    ],
+    "repository": {
+        "type": "github",
+        "url": "https://github.com/Qewertyy/Backloggd-Api"
+    },
     "license": "MIT",
     "devDependencies": {
         "@types/cors": "^2.8.17",
