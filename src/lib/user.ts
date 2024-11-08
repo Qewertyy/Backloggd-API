@@ -1,5 +1,5 @@
 import axios, { Axios, AxiosError } from "axios";
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import config from "../config";
 import { favoriteGames, recentlyPlayed, userInfo } from "../types/game";
 import { extractGame, extractRecentReviews } from "../utils/game";
@@ -33,7 +33,7 @@ async function getUserInfo(
       status: status,
     };
   }
-  const $ = cheerio.load(response.data);
+  const $ = load(response.data);
   let userinfo: userInfo = {} as userInfo;
   userinfo.username = username;
   userinfo.profile =
