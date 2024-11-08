@@ -9,7 +9,7 @@ async function getUserInfo(
 ): Promise<userInfo | { error: string; status: number }> {
   const referer = `${config.baseUrl}/search/users/${username}`;
   const response = await axios
-    .get(`https://${config.baseUrl}/u/${username}`, {
+    .get(`${config.baseUrl}/u/${username}`, {
       headers: {
         ...config.headers,
         "Turbolinks-Referrer": referer,
