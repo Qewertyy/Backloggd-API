@@ -1,15 +1,56 @@
 //Copyright 2023 Qewertyy, MIT License
 
-import { Cheerio, Element } from "cheerio";
+import { Cheerio, CheerioAPI, Element } from "cheerio";
+import { recentlyReviewed } from "../types/game";
 
 function extractGame(element: Cheerio<Element>) {
-    const game = element.find("div.overflow-wrapper");
-    const name = game.find("img").attr("alt");
-    const image = game.find("img").attr("src");
-    if (name && image) {
-        return { name, image };
-    }
-    return null;
+  const game = element.find("div.overflow-wrapper");
+  const name = game.find("img").attr("alt");
+  const image = game.find("img").attr("src");
+  const date = element.find("p.mb-0.played-date").text();
+  let rating;
+  const ratingDiv = element
+    .find("div.star-ratings-static div.stars-top")
+    .attr("style");
+  if (ratingDiv) {
+    rating = calculateRating(ratingDiv);
+  }
+  if (name && image) {
+    return { name, image, ...(date && { date }), ...(rating && { rating }) };
+  }
+  return null;
 }
 
-export { extractGame}
+function extractRecentReviews($: CheerioAPI, element: Cheerio<Element>) {
+  const games: recentlyReviewed[] = [];
+  const div = element.children();
+  div.find(".review-card").each((_i, el) => {
+    const selector = $(el);
+    const reviewId = selector.find(".review-body").attr("review_id");
+    let rating;
+    const ratingDiv = selector
+      .find("div.row.star-ratings-static div.stars-top")
+      .attr("style");
+    if (ratingDiv) rating = calculateRating(ratingDiv);
+    const game = extractGame(selector);
+    if (reviewId && game?.name && game?.image) {
+      games.push({
+        ...game,
+        review: selector.find(`#collapseReview${reviewId}`).text().trim(),
+        ...(rating && { rating }),
+      });
+    }
+  });
+  return games;
+}
+
+function calculateRating(style: string) {
+  const widthMatch = style.match(/width:\s*(\d+(\.\d+)?)%/);
+  if (widthMatch && widthMatch[1]) {
+    const widthPercentage = parseFloat(widthMatch[1]);
+    return (widthPercentage / 100) * 5;
+  }
+  return null;
+}
+
+export { extractGame, extractRecentReviews };

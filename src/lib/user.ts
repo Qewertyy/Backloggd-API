@@ -2,12 +2,12 @@ import axios, { Axios, AxiosError } from "axios";
 import cheerio from "cheerio";
 import config from "../config";
 import { favoriteGames, recentlyPlayed, userInfo } from "../types/game";
-import { extractGame } from "../utils/game";
+import { extractGame, extractRecentReviews } from "../utils/game";
 
 async function getUserInfo(
   username: string
 ): Promise<userInfo | { error: string; status: number }> {
-  const referer = `https://${config.baseUrl}/search/users/${username}`;
+  const referer = `${config.baseUrl}/search/users/${username}`;
   const response = await axios
     .get(`https://${config.baseUrl}/u/${username}`, {
       headers: {
@@ -36,9 +36,11 @@ async function getUserInfo(
   const $ = cheerio.load(response.data);
   let userinfo: userInfo = {} as userInfo;
   userinfo.username = username;
-  userinfo.profile = $("meta[property='og:image']").attr("content") || "https://backloggd.b-cdn.net/no_avatar.jpg";
+  userinfo.profile =
+    $("meta[property='og:image']").attr("content") ||
+    "https://backloggd.b-cdn.net/no_avatar.jpg";
   const hasBio = $("#bio-body").has("p").length === 0;
-  const userBio = hasBio ? $("#bio-body").text().trim() : "Nothing here!"
+  const userBio = hasBio ? $("#bio-body").text().trim() : "Nothing here!";
   userinfo.bio = userBio;
   const favoriteGames: favoriteGames[] = [];
   const recentlyPlayed: recentlyPlayed[] = [];
@@ -51,11 +53,14 @@ async function getUserInfo(
     const key = $(el).children("h4").text();
     userStats[key] = parseInt(value);
   });
-  favoritesDiv.each((i, el) => {
+  favoritesDiv.each((_i, el) => {
     const game = extractGame($(el));
     if (game) {
       const mostFavorite = el.attribs.class.includes("ultimate_fav");
-      favoriteGames.push({ ...game, mostFavorite });
+      favoriteGames.push({
+        ...game,
+        ...(mostFavorite && { mostFavorite }),
+      });
     }
   });
   recentlyPlayedDiv.each((i, el) => {
@@ -66,6 +71,7 @@ async function getUserInfo(
   });
   userinfo.favoriteGames = favoriteGames;
   userinfo.recentlyPlayed = recentlyPlayed;
+  userinfo.recentlyReviewed = extractRecentReviews($, $("div.row.mb-3"));
   userinfo = { ...userinfo, ...userStats };
   return userinfo;
 }

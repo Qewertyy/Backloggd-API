@@ -5,6 +5,7 @@ import routers from "./routes";
 const app = express();
 
 app.set("trust proxy", 1);
+app.set("json spaces", 2);
 app.use(
   express.json({
     limit: "50mb",
