@@ -1,7 +1,7 @@
 //Copyright 2023 Qewertyy, MIT License
 
 import { Cheerio, CheerioAPI, Element } from "cheerio";
-import { recentlyReviewed } from "../types/game";
+import { recentlyReviewed, userBadges } from "../types/game";
 
 function extractGame(element: Cheerio<Element>) {
   const game = element.find("div.overflow-wrapper");
@@ -53,4 +53,23 @@ function calculateRating(style: string) {
   return null;
 }
 
-export { extractGame, extractRecentReviews };
+function extractBadges($: CheerioAPI, element: Cheerio<Element>) {
+  const badges: userBadges[] = [];
+  element.find(".badges .backlog-badge-cus-col").each((_i, el) => {
+    const selector = $(el);
+    const pTag = selector.find(".badge-tooltip");
+    const id = pTag.attr("badge_id");
+    const badgeDiv = selector.find(`#badge-${id}`);
+    if (id && badgeDiv) {
+      badges.push({
+        id,
+        image: pTag.find("img").attr("src"),
+        name: badgeDiv.find(".badge-title").text().trim(),
+        description: badgeDiv.find(".badge-desc").text().trim(),
+      });
+    }
+  });
+  return badges;
+}
+
+export { extractGame, extractRecentReviews, extractBadges };

@@ -2,7 +2,11 @@ import axios, { Axios, AxiosError } from "axios";
 import { load } from "cheerio";
 import config from "../config";
 import { favoriteGames, recentlyPlayed, userInfo } from "../types/game";
-import { extractGame, extractRecentReviews } from "../utils/game";
+import {
+  extractBadges,
+  extractGame,
+  extractRecentReviews,
+} from "../utils/game";
 
 async function getUserInfo(
   username: string
@@ -47,6 +51,7 @@ async function getUserInfo(
   const favoritesDiv = $("#profile-favorites").children();
   const recentlyPlayedDiv = $("#profile-journal").children();
   const userStatsDiv = $("#profile-stats").children();
+  const userBadgesDiv = $("#profile-sidebar").children();
   const userStats: { [key: string]: number } = {};
   userStatsDiv.each((i, el) => {
     const value = $(el).children("h1").text();
@@ -69,11 +74,11 @@ async function getUserInfo(
       recentlyPlayed.push({ ...game });
     }
   });
+  userinfo.badges = extractBadges($, userBadgesDiv);
   userinfo.favoriteGames = favoriteGames;
   userinfo.recentlyPlayed = recentlyPlayed;
   userinfo.recentlyReviewed = extractRecentReviews($, $("div.row.mb-3"));
-  userinfo = { ...userinfo, ...userStats };
-  return userinfo;
+  return { ...userinfo, ...userStats };
 }
 
 export { getUserInfo };

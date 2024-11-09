@@ -8,7 +8,9 @@ const cache = new NodeCache({ stdTTL: 3600 });
 const Route = Router();
 
 async function userInfo(req: Request, res: Response) {
+  let refresh = false;
   const { username } = req.params;
+  if ("refresh" in req.query) refresh = Boolean(req.query.refresh);
   if (!username) {
     return res.status(400).json({
       message: "Username is required",
@@ -16,8 +18,10 @@ async function userInfo(req: Request, res: Response) {
       details: "/:username",
     });
   }
+  if (refresh) {
+    cache.del(username);
+  }
   const cachedResponse = cache.get(username);
-  res.set("Cache-Control", "public, max-age=3600");
   if (cachedResponse) {
     return res.status(200).json({
       message: "success",
