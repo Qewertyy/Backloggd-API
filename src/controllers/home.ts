@@ -1,7 +1,7 @@
 //Copyright 2023 Qewertyy, MIT License
 
 import { Router, Request, Response } from "express";
-import {repository} from "../../package.json";
+import { repository } from "../../package.json";
 const Route = Router();
 
 function home(req: Request, res: Response) {

@@ -1,7 +1,7 @@
 //Copyright 2023 Qewertyy, MIT License
 
 import { Cheerio, CheerioAPI, Element } from "cheerio";
-import { recentlyReviewed, userBadges } from "../types/game";
+import { recentlyReviewed, userBadges } from "../types";
 
 function extractGame(element: Cheerio<Element>) {
   const game = element.find("div.overflow-wrapper");

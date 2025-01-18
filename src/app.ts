@@ -6,6 +6,7 @@ const app = express();
 
 app.set("trust proxy", 1);
 app.set("json spaces", 2);
+app.disable("x-powered-by");
 app.use(
   express.json({
     limit: "50mb",
@@ -19,11 +20,10 @@ app.use(
   })
 );
 
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((_req: Request, res: Response, next: NextFunction) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, HEAD, POST, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.header("X-By", "https://github.com/Qewertyy");
   next();
 });
 

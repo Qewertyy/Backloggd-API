@@ -1,7 +1,7 @@
 import axios, { Axios, AxiosError } from "axios";
 import { load } from "cheerio";
 import config from "../config";
-import { favoriteGames, recentlyPlayed, userInfo } from "../types/game";
+import { favoriteGames, recentlyPlayed, userInfo } from "../types";
 import {
   extractBadges,
   extractGame,
@@ -38,14 +38,13 @@ async function getUserInfo(
     };
   }
   const $ = load(response.data);
-  let userinfo: userInfo = {} as userInfo;
+  let userinfo = {} as userInfo;
   userinfo.username = username;
   userinfo.profile =
     $("meta[property='og:image']").attr("content") ||
     "https://backloggd.b-cdn.net/no_avatar.jpg";
   const hasBio = $("#bio-body").has("p").length === 0;
-  const userBio = hasBio ? $("#bio-body").text().trim() : "Nothing here!";
-  userinfo.bio = userBio;
+  userinfo.bio = hasBio ? $("#bio-body").text().trim() : "Nothing here!";
   const favoriteGames: favoriteGames[] = [];
   const recentlyPlayed: recentlyPlayed[] = [];
   const favoritesDiv = $("#profile-favorites").children();

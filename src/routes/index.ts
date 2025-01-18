@@ -5,7 +5,7 @@ const Route = Router();
 import {home,user} from '../controllers';
 
 Route
-   .use('/user', user)
+   .use(['/user','/u'], user)
    .use('/', home)
    .use('*', (req: Request, res: Response) => res.status(404).json({ message: "not found", code: 0 }))
 
