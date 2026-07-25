@@ -6,20 +6,17 @@ const Route = Router();
 
 function home(req: Request, res: Response) {
   const response = {
-    code:2,
-    message:"Unofficial Backloggd API.",
-    source:repository.url
+    code: 2,
+    message: "unofficial backloggd API.",
+    source: repository.url,
   };
   res.status(200).json(response);
-};
+}
 
-
-Route
-  .get('/', (req: Request,res: Response) => {
-    return home(req,res);
-  })
-  .post('/', (req: Request, res: Response) => {
-      return home(req,res);
-  });
+Route.get("/", (req: Request, res: Response) => {
+  return home(req, res);
+}).post("/", (req: Request, res: Response) => {
+  return home(req, res);
+});
 
 export default Route;

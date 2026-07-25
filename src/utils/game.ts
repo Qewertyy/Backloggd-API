@@ -1,6 +1,7 @@
 //Copyright 2023 Qewertyy, MIT License
 
-import { Cheerio, CheerioAPI, Element } from "cheerio";
+import { Cheerio, CheerioAPI } from "cheerio";
+import { Element } from "domhandler";
 import { recentlyReviewed, userBadges } from "../types";
 
 function extractGame(element: Cheerio<Element>) {

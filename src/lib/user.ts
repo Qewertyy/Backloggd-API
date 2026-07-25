@@ -9,7 +9,7 @@ import {
 } from "../utils/game";
 
 async function getUserInfo(
-  username: string
+  username: string,
 ): Promise<userInfo | { error: string; status: number }> {
   const referer = `${config.baseUrl}/search/users/${username}`;
   const response = await axios
@@ -53,8 +53,8 @@ async function getUserInfo(
   const userBadgesDiv = $("#profile-sidebar").children();
   const userStats: { [key: string]: number } = {};
   userStatsDiv.each((i, el) => {
-    const value = $(el).children("h1").text();
-    const key = $(el).children("h4").text();
+    const value = $(el).children("a").children("h1").text().trim();
+    const key = $(el).children("h4").text().trim();
     userStats[key] = parseInt(value);
   });
   favoritesDiv.each((_i, el) => {
